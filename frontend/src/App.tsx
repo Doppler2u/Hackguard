@@ -139,7 +139,8 @@ function App() {
       loadData();
     } catch (err: any) {
       console.error(err);
-      setStatusText(err.shortMessage || err.message || 'Registration failed');
+      const errMsg = err?.shortMessage || err?.message || JSON.stringify(err);
+      setStatusText(`Error: ${errMsg}`);
       showToast('Registration failed');
     } finally {
       setIsSubmitting(false);
@@ -168,7 +169,8 @@ function App() {
       loadData();
     } catch (err: any) {
       console.error(err);
-      setStatusText(err.shortMessage || err.message || 'Claim filing failed');
+      const errMsg = err?.shortMessage || err?.message || JSON.stringify(err);
+      setStatusText(`Error: ${errMsg}`);
       showToast('Claim filing failed');
     } finally {
       setIsSubmitting(false);
