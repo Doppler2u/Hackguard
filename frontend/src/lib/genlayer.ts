@@ -1,7 +1,7 @@
 import { createClient } from "genlayer-js";
 import { studionet } from "genlayer-js/chains";
 
-export const CONTRACT_ADDRESS = "0x7bE320E42784A3581cf5c9B29C1BB7E33Bb828B3";
+
 
 export function createGenlayerClient(walletAddress: string) {
   if (!walletAddress || typeof window === "undefined" || !(window as any).ethereum) return null;

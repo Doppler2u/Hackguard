@@ -1,6 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Shield, Activity, PlusCircle, AlertTriangle, CheckCircle, ExternalLink, RefreshCw, Zap, Wallet, HelpCircle } from 'lucide-react';
-import { createGenlayerClient, connectWallet, shortAddress, CONTRACT_ADDRESS } from './lib/genlayer';
+import { createGenlayerClient, connectWallet, shortAddress } from './lib/genlayer';
+
+const CONTRACT_ADDRESS = "0x7bE320E42784A3581cf5c9B29C1BB7E33Bb828B3";
 import { Card, CardHeader, CardContent } from './components/Card';
 import { Button } from './components/Button';
 import { Input } from './components/Input';
