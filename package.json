@@ -1,0 +1,11 @@
+{
+  "name": "hackguard-genlayer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "node deploy.js"
+  },
+  "dependencies": {
+    "genlayer-js": "^1.1.8"
+  }
+}
