@@ -1,11 +1,35 @@
 import { createClient } from "genlayer-js";
 import { studionet } from "genlayer-js/chains";
 
-export function createGenlayerClient(account: string) {
-  if (!account) return null;
+const GENLAYER_CHAIN_ID = "0xf22f";
+
+export async function switchToGenlayer() {
+  const ethereum = (window as any).ethereum;
+  if (!ethereum) return;
+  try {
+    await ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: GENLAYER_CHAIN_ID }] });
+  } catch (e: any) {
+    if (e.code === 4902) {
+      await ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+          chainId: GENLAYER_CHAIN_ID,
+          chainName: "GenLayer Studio Network",
+          nativeCurrency: { name: "GEN Token", symbol: "GEN", decimals: 18 },
+          rpcUrls: ["https://studio.genlayer.com/api"],
+          blockExplorerUrls: ["https://explorer-studio.genlayer.com"],
+        }],
+      });
+    }
+  }
+}
+
+export function createGenlayerClient(walletAddress: string) {
+  if (!walletAddress || typeof window === "undefined" || !(window as any).ethereum) return null;
   return createClient({
     chain: studionet,
-    account: account as `0x${string}`,
+    provider: (window as any).ethereum,
+    account: walletAddress as `0x${string}`,
   });
 }
 

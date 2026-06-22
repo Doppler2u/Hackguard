@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Shield, Activity, PlusCircle, AlertTriangle, CheckCircle, ExternalLink, RefreshCw, Zap, Wallet, HelpCircle } from 'lucide-react';
-import { createGenlayerClient, connectWallet, shortAddress } from './lib/genlayer';
+import { createGenlayerClient, connectWallet, shortAddress, switchToGenlayer } from './lib/genlayer';
 
 const CONTRACT_ADDRESS = "0x7bE320E42784A3581cf5c9B29C1BB7E33Bb828B3";
 import { Card, CardHeader, CardContent } from './components/Card';
@@ -125,6 +125,7 @@ function App() {
     setStatusText('Submitting policy registration… Approve in MetaMask.');
     try {
       const date = new Date().toISOString().split('T')[0];
+      await switchToGenlayer();
       const hash = await client.writeContract({
         address: CONTRACT_ADDRESS as `0x${string}`,
         functionName: "register_policy",
@@ -155,6 +156,7 @@ function App() {
     setIsSubmitting(true);
     setStatusText('Submitting claim… Approve in MetaMask. AI analysis may take 1-2 min.');
     try {
+      await switchToGenlayer();
       const hash = await client.writeContract({
         address: CONTRACT_ADDRESS as `0x${string}`,
         functionName: "file_claim",
