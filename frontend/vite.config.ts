@@ -7,5 +7,14 @@ export default defineConfig({
   build: {
     minify: false,
     target: 'esnext'
+  },
+  server: {
+    proxy: {
+      '/api/rpc': {
+        target: 'https://studio.genlayer.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/rpc/, '/api')
+      }
+    }
   }
 })
