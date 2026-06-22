@@ -1,20 +1,11 @@
 import { createClient } from "genlayer-js";
 import { studionet } from "genlayer-js/chains";
 
-// Use a proxy endpoint to avoid CORS issues on Vercel.
-// In dev, Vite proxies /api/rpc -> studio.genlayer.com/api
-// In prod, vercel.json rewrites /api/rpc -> studio.genlayer.com/api
-const RPC_ENDPOINT = typeof window !== "undefined" && window.location.hostname === "localhost"
-  ? "https://studio.genlayer.com/api"
-  : `${window.location.origin}/api/rpc`;
-
-export function createGenlayerClient(walletAddress: string) {
-  if (!walletAddress || typeof window === "undefined" || !(window as any).ethereum) return null;
-  return createClient({ 
-    chain: studionet, 
-    endpoint: RPC_ENDPOINT,
-    provider: (window as any).ethereum, 
-    account: walletAddress as `0x${string}` 
+export function createGenlayerClient(account: string) {
+  if (!account) return null;
+  return createClient({
+    chain: studionet,
+    account: account as `0x${string}`,
   });
 }
 
