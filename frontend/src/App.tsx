@@ -216,74 +216,128 @@ function App() {
         </div>
       </header>
 
-      <main className="app-main container">
-        {/* Status bar */}
-        <div className="glass-panel" style={{ padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>{statusText}</span>
-          <span className="tabular-nums" style={{ color: 'var(--text-tertiary)' }}>
-            Contract: {shortAddress(CONTRACT_ADDRESS)}
-          </span>
-        </div>
-
-        {/* Tab navigation */}
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-          <Button 
-            variant={activeTab === 'dashboard' ? 'primary' : 'secondary'} 
-            onClick={() => { setActiveTab('dashboard'); if (client) loadData(); }}
-          >
-            <Activity size={16} /> Dashboard
-          </Button>
-          <Button 
-            variant={activeTab === 'register' ? 'primary' : 'secondary'} 
-            onClick={() => setActiveTab('register')}
-          >
-            <PlusCircle size={16} /> Register Policy
-          </Button>
-          <Button 
-            variant={activeTab === 'claim' ? 'primary' : 'secondary'} 
-            onClick={() => setActiveTab('claim')}
-          >
-            <AlertTriangle size={16} /> File Claim
-          </Button>
-        </div>
-
-        {/* Transaction history */}
-        {txHistory.length > 0 && (
-          <div className="glass-panel" style={{ padding: '1rem', marginBottom: '2rem' }}>
-            <h4 style={{ marginBottom: '0.75rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Transaction Log</h4>
-            {txHistory.map((tx, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.375rem 0', borderTop: i > 0 ? '1px solid var(--bg-glass-border)' : 'none', fontSize: '0.8125rem' }}>
-                <span style={{ color: 'var(--accent-primary)' }}>{tx.label}</span>
-                <span className="tabular-nums" style={{ color: 'var(--text-tertiary)' }}>{tx.time}</span>
-                <a 
-                  href={`https://explorer-studio.genlayer.com/transactions/${tx.hash}`} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-                >
-                  {tx.hash.slice(0, 10)}…{tx.hash.slice(-8)} <ExternalLink size={12} />
-                </a>
-              </div>
-            ))}
+      {!walletAddress ? (
+        <main className="app-main" style={{ padding: 0, position: 'relative' }}>
+          {/* Background Elements */}
+          <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+            <div style={{
+              position: 'absolute', width: '800px', height: '800px', borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(6, 182, 212, 0.08), transparent 60%)',
+              top: '-20%', right: '-10%',
+            }} />
           </div>
-        )}
 
-        {activeTab === 'dashboard' && (
-          <div className="fade-in">
-            <h1 style={{ marginBottom: '1.5rem' }}>Protocol Overview</h1>
-            
-            {!walletAddress && (
-              <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', marginBottom: '2rem' }}>
-                <Wallet size={40} style={{ color: 'var(--accent-primary)', marginBottom: '1rem' }} />
-                <h3 style={{ marginBottom: '0.5rem' }}>Connect Your Wallet</h3>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                  Connect MetaMask to interact with HackGuard on GenLayer Studionet
+          <div className="container" style={{ position: 'relative', zIndex: 1, minHeight: 'calc(100vh - 73px)', display: 'flex', alignItems: 'center', padding: '4rem 1.5rem' }}>
+            <div className="fade-in" style={{
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '4rem', alignItems: 'center', width: '100%'
+            }}>
+              {/* Left Side */}
+              <div>
+                <h1 className="hero-title">Decentralized AI Smart Contract Insurance</h1>
+                <p className="hero-description">
+                  HackGuard leverages GenLayer Intelligent Contracts to provide fully automated, transparent, and decentralized exploit coverage. When a hack happens, our AI consensus network investigates and pays out — no centralized adjusters required.
                 </p>
-                <Button onClick={handleConnect}>
-                  <Wallet size={16} /> Connect MetaMask
-                </Button>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  <Button onClick={handleConnect} className="btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.125rem', borderRadius: '12px' }}>
+                    <Wallet size={20} /> Connect Wallet
+                  </Button>
+                  <Button variant="secondary" style={{ padding: '1rem 2rem', fontSize: '1.125rem', borderRadius: '12px' }} onClick={() => window.open('https://docs.genlayer.com', '_blank')}>
+                    <ExternalLink size={20} /> View Docs
+                  </Button>
+                </div>
               </div>
-            )}
+
+              {/* Right Side */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="hero-feature glass-panel-hover">
+                  <div style={{ padding: '0.75rem', background: 'var(--status-info-bg)', borderRadius: '12px', color: 'var(--accent-primary)' }}>
+                    <Shield size={24} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '1.125rem', marginBottom: '0.25rem' }}>AI Claim Analysis</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>Claims are analyzed by large language models parsing news and on-chain evidence.</p>
+                  </div>
+                </div>
+                
+                <div className="hero-feature glass-panel-hover">
+                  <div style={{ padding: '0.75rem', background: 'var(--status-success-bg)', borderRadius: '12px', color: 'var(--status-success)' }}>
+                    <CheckCircle size={24} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '1.125rem', marginBottom: '0.25rem' }}>Multi-Validator Consensus</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>GenLayer’s validators independently reach consensus on the exploit's severity.</p>
+                  </div>
+                </div>
+
+                <div className="hero-feature glass-panel-hover">
+                  <div style={{ padding: '0.75rem', background: 'var(--status-warning-bg)', borderRadius: '12px', color: 'var(--status-warning)' }}>
+                    <Zap size={24} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '1.125rem', marginBottom: '0.25rem' }}>Automated Payouts</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>Approved claims automatically route predefined coverage amounts to affected users.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      ) : (
+        <main className="app-main container">
+          {/* Status bar */}
+          <div className="glass-panel" style={{ padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>{statusText}</span>
+            <span className="tabular-nums" style={{ color: 'var(--text-tertiary)' }}>
+              Contract: {shortAddress(CONTRACT_ADDRESS)}
+            </span>
+          </div>
+
+          {/* Tab navigation */}
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+            <Button 
+              variant={activeTab === 'dashboard' ? 'primary' : 'secondary'} 
+              onClick={() => { setActiveTab('dashboard'); if (client) loadData(); }}
+            >
+              <Activity size={16} /> Dashboard
+            </Button>
+            <Button 
+              variant={activeTab === 'register' ? 'primary' : 'secondary'} 
+              onClick={() => setActiveTab('register')}
+            >
+              <PlusCircle size={16} /> Register Policy
+            </Button>
+            <Button 
+              variant={activeTab === 'claim' ? 'primary' : 'secondary'} 
+              onClick={() => setActiveTab('claim')}
+            >
+              <AlertTriangle size={16} /> File Claim
+            </Button>
+          </div>
+
+          {/* Transaction history */}
+          {txHistory.length > 0 && (
+            <div className="glass-panel" style={{ padding: '1rem', marginBottom: '2rem' }}>
+              <h4 style={{ marginBottom: '0.75rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Transaction Log</h4>
+              {txHistory.map((tx, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.375rem 0', borderTop: i > 0 ? '1px solid var(--bg-glass-border)' : 'none', fontSize: '0.8125rem' }}>
+                  <span style={{ color: 'var(--accent-primary)' }}>{tx.label}</span>
+                  <span className="tabular-nums" style={{ color: 'var(--text-tertiary)' }}>{tx.time}</span>
+                  <a 
+                    href={`https://explorer-studio.genlayer.com/transactions/${tx.hash}`} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                  >
+                    {tx.hash.slice(0, 10)}…{tx.hash.slice(-8)} <ExternalLink size={12} />
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === 'dashboard' && (
+            <div className="fade-in">
+              <h1 style={{ marginBottom: '1.5rem' }}>Protocol Overview</h1>
 
             <div className="grid-cols-2" style={{ marginBottom: '2rem' }}>
               <Card>
@@ -511,6 +565,7 @@ function App() {
           </div>
         )}
       </main>
+      )}
 
       <div aria-live="polite" style={{ position: 'fixed', bottom: '1.5rem', right: '1.5rem', zIndex: 100 }}>
         {toastMessage && (
